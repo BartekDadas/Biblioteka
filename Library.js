@@ -6,10 +6,9 @@ fs.writeFileSync('./ksiazki.json', JSON.stringify(new Ksiazka("Pan Tadeusz", "Ad
 
 
 class Library {
-
-
-    Books = [new Ksiazka("Pan Tadeusz", "Adam Mickiewicz",1873, 001)];
     
+
+    Books = []
     showBookISBN(title) {
         for(let i in this.Books) {
             if(title === i.name) {
@@ -23,29 +22,30 @@ class Library {
 
     readChoosenBook(title, ibsn) {
         for (let i in this.Books) {
-            if(title === this.Books[i].name && ibsn == this.Books[i].IBSN) {
-                console.log(i.name)
-                console.log(i.author)
-                console.log(i.releaseDate)
-                console.log(i.IBSN)
-                fs.readFile('./ksiazki.json', (err, data) => {
-                    console.log(data);
-                })
+            //console.log(title, this.Books[i].name, ibsn, this.Books[i].ISBN)
+            if(title === this.Books[i].name && ibsn == this.Books[i].ISBN) {
+                console.log(this.Books[i].name)
+                console.log(this.Books[i].author)
+                console.log(this.Books[i].releaseDate)
+                console.log(this.Books[i].ISBN)
+                const data = fs.readFileSync('./ksiazki.json');
+                console.log(data.toString())
+
             }
         }
 
     }
      addNewBookToLibrary(title, author, releaseDate, IBSN) {
-        Books.push(new Ksiazka(title, author, releaseDate, IBSN))
+        this.Books.push(new Ksiazka(title, author, releaseDate, IBSN))
         fs.writeFileSync(`./${title}.json`, JSON.stringify(new Ksiazka(title, author, releaseDate, IBSN)))
         console.log("Książka została pomyślnie dodana do biblioteki")
     }
 
      deleteBookFromLibrary(title, ibsn) {
-        for (i in this.Books) {
-            if(title === this.Books[i].name && ibsn == this.Books[i].IBSN) {
-                Books.delete(i)
-                fs.unlinkSync('./ksiazki.json') 
+        for (let i in this.Books) {
+            if(title === this.Books[i].name && ibsn == this.Books[i].ISBN) {
+                delete this.Books[i]
+                fs.unlinkSync(`./${title}.json`) 
                 console.log("Książka została pomyślnie usunięta z biblioteki")
             }
         }
